@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.params=speed
+comment0.target=Particle(double)
+comment1.params=death\ speed
+comment1.target=Particle(java.lang.String,\ double)
+comment2.params=r\ g\ b\ speed
+comment2.target=Particle(int,\ int,\ int,\ double)
+comment3.params=
+comment3.target=void\ act()
+comment3.text=\r\n\ Act\ -\ do\ whatever\ the\ Particle\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n
+comment4.params=
+comment4.target=int\ returnRotation()
+comment5.params=
+comment5.target=void\ checkMyLife()
+comment6.params=
+comment6.target=int\ randomDirection()
+numComments=7

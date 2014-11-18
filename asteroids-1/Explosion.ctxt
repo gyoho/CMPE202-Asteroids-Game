@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Explosion()
+comment0.text=\r\n\ Create\ a\ new\ proton\ wave.\r\n
+comment1.params=
+comment1.target=void\ initializeImages()
+comment1.text=\ \r\n\ Create\ the\ images\ for\ expanding\ the\ wave.\r\n
+comment2.params=
+comment2.target=void\ act()
+comment2.text=\r\n\ Act\ for\ the\ proton\ wave\ is\:\ grow\ and\ check\ whether\ we\ hit\ anything.\r\n
+comment3.params=
+comment3.target=void\ checkCollision()
+comment3.text=\r\n\ Explode\ all\ intersecting\ asteroids.\r\n
+comment4.params=
+comment4.target=void\ grow()
+comment4.text=\r\n\ Grow\ this\ wave.\ If\ we\ get\ to\ full\ size,\ remove.\r\n
+numComments=5
