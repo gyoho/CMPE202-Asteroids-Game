@@ -17,10 +17,7 @@ public class Rocket extends SmoothMover
 
     private int reloadDelayCount;               // How long ago we fired the gun the last time.
     private int protonDelayCount;               // How long ago we fired the proton wave the last time.
-    public static int specialWeaponNumber;
     public static int boostWeaponNumber;
-    public static double fuelAmmount;
-    public static double shieldAmmount;
 
     private GreenfootImage rocket = new GreenfootImage("rocket.png");    
     private GreenfootImage image = getImage();
@@ -33,7 +30,6 @@ public class Rocket extends SmoothMover
     public static int width;
     public static int height;
 
-    public static boolean Shield;
     public static boolean PIndicatorAdded;
     public static boolean bWeaponActivated;
     /**
@@ -45,16 +41,12 @@ public class Rocket extends SmoothMover
         int b = image.getHeight();
         width = a;
         height = b;
-        Shield = false;
         PIndicatorAdded = false;
         
         reloadDelayCount = 5;
         protonDelayCount = 300;
-        specialWeaponNumber = 0;
-        shieldAmmount = 1;
         
         addForce(new Vector(13, 0.3)); // initially slowly drifting
-        fuelAmmount = 100;
     }
 
     /**
@@ -76,7 +68,6 @@ public class Rocket extends SmoothMover
 
         checkHud();
         checkCollision();
-        checkShield();
     }
 
     /**
@@ -141,14 +132,6 @@ public class Rocket extends SmoothMover
         {
             startProtonWave();
         }
-        if (Greenfoot.isKeyDown("s"))
-        {
-            startShield();
-        }
-        if (Greenfoot.isKeyDown("d") && specialWeaponNumber >= 1)
-        {
-            startSpecial();
-        }
         if (Greenfoot.isKeyDown("f") && boostWeaponNumber >= 1)
         {
             bWeaponActivated = true;
@@ -161,10 +144,9 @@ public class Rocket extends SmoothMover
     private void checkCollision() 
     {
         Actor a = getOneIntersectingObject(Asteroid.class);
-        if (a != null && !Shield) 
+        if (a != null) 
         {
             Space space = (Space) getWorld();
-            space.addObject(new Explosion(), getX(), getY());
             for (int i = 0; i < 60 + 10; i++)
             {
                 getWorld().addObject(new Particle("die", 1.7), getX(), getY());
@@ -179,20 +161,14 @@ public class Rocket extends SmoothMover
      */
     private void ignite(boolean boosterOn) 
     {
-        if (boosterOn && fuelAmmount > 0)
+        if (boosterOn)
         {
             addForce (new Vector(getRotation(), 0.3));
-
             showFlame();
-            fuelAmmount -= 1.3;
         }
-        else if (boosterOn && fuelAmmount <= 0)
+        else if (boosterOn)
         {
             createParticles();
-        }
-        else if (!boosterOn && fuelAmmount < 100)
-        {
-            fuelAmmount += .5;
         }
     }
 
@@ -241,26 +217,6 @@ public class Rocket extends SmoothMover
         }
     }
 
-    private void startShield()
-    {
-        if (shieldAmmount > 0 && Shield == false)
-        {
-            Shield = true;
-            setImage("rocketWithShield.png");
-        }
-    }
-
-    private void startSpecial()
-    {
-        specialWeaponNumber--;
-        int range = getWorld().getWidth();
-        List<Asteroid> asteroids = getObjectsInRange(range, Asteroid.class);
-        for (Asteroid a : asteroids)
-        {
-            a.hit(60);
-        }
-    }
-
     private void checkHud()
     {
 
@@ -304,23 +260,5 @@ public class Rocket extends SmoothMover
 
         }
     }
-    
-    private void checkShield()
-    {
-        if (Shield && shieldAmmount > 0)
-        {
-            shieldAmmount -= .6;
-        }
-        else if(Shield && shieldAmmount <= 0 )
-        {
-            Shield = false;
-            setImage("rocket.png");
-        }
-        else if (!Shield && shieldAmmount < 100)
-        {
-            shieldAmmount += .3;
-        }
-    }
-
 
 }

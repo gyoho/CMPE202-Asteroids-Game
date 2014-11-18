@@ -67,13 +67,13 @@ public class Particle extends SmoothMover
     public Particle(int r, int g, int b, double speed)
     {
         image.scale(2, 2);
-            image.clear();
-            image.setColor(new Color(r, g, b));
-            image.fill();
-            int ro = Greenfoot.getRandomNumber(360);
-            rotate = ro;
-            addForce(new Vector (ro, speed));
-            myLife = 100;
+        image.clear();
+        image.setColor(new Color(r, g, b));
+        image.fill();
+        int ro = Greenfoot.getRandomNumber(360);
+        rotate = ro;
+        addForce(new Vector (ro, speed));
+        myLife = 100;
     }
 
     /**

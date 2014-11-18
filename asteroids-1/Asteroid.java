@@ -100,7 +100,7 @@ public class Asteroid extends SmoothMover
             
             for (int i = 0; i < 30 + 10; i++)
             {
-                getWorld().addObject(new Particle("destroyed", 1.0), getX(), getY());
+                //getWorld().addObject(new Particle("destroyed", 1.0), getX(), getY());
             }
         
             getWorld().removeObject(this);

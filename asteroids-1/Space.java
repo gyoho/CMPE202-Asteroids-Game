@@ -11,15 +11,11 @@ public class Space extends World
 {
     private Counter scoreCounter;
     private LevelCounter levelCounter;
-    private FuelIndicator fuel;
-    private ShieldPercent shieldPercent;
     private int startAsteroids = 1;
     private int otherAsteroidNumber = 3;
 
     public static int level = 1;
     public static int aNumber;
-    public static int sNumber;
-    public static int bNumber;
     public static int fireworkNumber;
     private boolean played = false;
     private boolean gameOver = false;
@@ -38,31 +34,23 @@ public class Space extends World
         addObject(rocket, getWidth()/2 + 100, getHeight()/2);
 
         aNumber = 0;
-        sNumber = 0;
         fireworkNumber = 0;
         addAsteroids(startAsteroids);
 
         levelCounter = new LevelCounter(level);
         scoreCounter = new Counter("Score: ");
-        fuel = new FuelIndicator();
-        shieldPercent = new ShieldPercent();
         addObject(scoreCounter, 60, 580);
         addObject(levelCounter, 60, 550);
-        addObject(fuel, getWidth() / 2 - 60, getHeight() - 10);
-        addObject(shieldPercent, getWidth() / 2 + 60, getHeight() - 10);
-
-        Explosion.initializeImages();
         ProtonWave.initializeImages();
 
         level = 1;
 
-        setPaintOrder(LevelCounter.class, Counter.class, ScoreBoard.class, FuelIndicator.class, Rocket.class, Firework.class, Flame.class, Particle.class, Asteroid.class);
+        setPaintOrder(LevelCounter.class, Counter.class, ScoreBoard.class, Rocket.class, Firework.class, Flame.class, Particle.class, Asteroid.class);
     }
 
     public void act()
     {
         checkANumber();
-        spawnSpecialItems();
         playBgm();
 
         if(gameOver)
@@ -109,13 +97,12 @@ public class Space extends World
      */
     public void gameOver() 
     {
-        String gameSaying[] = {"OMNOMNOM!", "YOU SUCK!!", "YOU BLOW!!", "FAIL!", "THATS BAD...", "WINNER!...NOT", "GETTING GOOD", "EH..."};
-        int i = Greenfoot.getRandomNumber(6);
+        String gameSaying[] = {"YOU SUCK!!", "YOU BLOW!!", "NOT BAD", "WINNER!...NOT", "GETTING GOOD", "GOOD JOB", "IMPRESSIVE"};
 
         gameOver = true;
         if (level >= 1 && level < 8)
         {
-            addObject(new ScoreBoard(Counter.value, gameSaying[i]), getWidth()/2, getHeight()/2);
+            addObject(new ScoreBoard(Counter.value, gameSaying[level-1]), getWidth()/2, getHeight()/2);
         }
         else
         {
@@ -150,17 +137,6 @@ public class Space extends World
     public void updateLevel()
     {
         GreenfootImage background = getBackground();
-    }
-
-    public void spawnSpecialItems()
-    {
-        int sDelay = Greenfoot.getRandomNumber(600);
-        int bDelay = Greenfoot.getRandomNumber(600);
-        if (level >= 3 && sDelay >= 599 && sNumber == 0 && Rocket.specialWeaponNumber <= 0)
-        {
-            addObject(new Special(), Greenfoot.getRandomNumber(getWidth()),Greenfoot.getRandomNumber(getHeight()));
-            sNumber++;
-        }
     }
 
     private void playBgm()
