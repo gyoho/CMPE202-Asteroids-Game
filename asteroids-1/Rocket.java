@@ -12,12 +12,11 @@ import java.util.List;
  */
 public class Rocket extends SmoothMover
 {
-    private static final int gunReloadTime = 5;         // The minimum delay between firing the gun.
+    private static final int gunReloadTime = 10;         // The minimum delay between firing the gun.
     private static final int protonReloadTime = 500;    // The minimum delay between proton wave bursts.
 
     private int reloadDelayCount;               // How long ago we fired the gun the last time.
     private int protonDelayCount;               // How long ago we fired the proton wave the last time.
-    public static int boostWeaponNumber;
 
     private GreenfootImage rocket = new GreenfootImage("rocket.png");    
     private GreenfootImage image = getImage();
@@ -132,10 +131,6 @@ public class Rocket extends SmoothMover
         {
             startProtonWave();
         }
-        if (Greenfoot.isKeyDown("f") && boostWeaponNumber >= 1)
-        {
-            bWeaponActivated = true;
-        }
     }
 
     /**
@@ -165,10 +160,6 @@ public class Rocket extends SmoothMover
         {
             addForce (new Vector(getRotation(), 0.3));
             showFlame();
-        }
-        else if (boosterOn)
-        {
-            createParticles();
         }
     }
 
@@ -207,7 +198,7 @@ public class Rocket extends SmoothMover
      */
     private void startProtonWave() 
     {
-        if (protonDelayCount >= protonReloadTime) 
+        if (Space.level > 2 && protonDelayCount >= protonReloadTime) 
         {
             ProtonWave wave = new ProtonWave();
             getWorld().addObject (wave, getX(), getY());
@@ -224,15 +215,6 @@ public class Rocket extends SmoothMover
         {
             getWorld().addObject(new WaveDisplay(), getWorld().getWidth() / 2, getWorld(). getHeight() / getWorld().getHeight() + 20);
             PIndicatorAdded = true;
-        }
-    }
-
-    private void createParticles()
-    {
-        int i = Greenfoot.getRandomNumber(100);
-        if (i >= 85)
-        {
-            getWorld().addObject(new Particle(getSpeed() / 15), getX(), getY());
         }
     }
 

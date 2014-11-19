@@ -100,18 +100,6 @@ public abstract class SmoothMover extends Actor
     }
     
     /**
-     * Accelerate the speed of this mover by the given factor. (Factors < 1 will
-     * decelerate.)
-     */
-    public void accelerate(double factor)
-    {
-        movement.scale(factor);
-        if (movement.getLength() < 0.15) {
-            movement.setNeutral();
-        }
-    }
-    
-    /**
      * Return the speed of this actor.
      */
     public double getSpeed()

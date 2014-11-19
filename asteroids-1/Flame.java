@@ -19,9 +19,6 @@ public class Flame extends SmoothMover
         scale = 15;
         //flame.clear();
         flame.scale((int) scale, (int) scale);
-        //flame.setColor(new Color(255, 150, 75));
-        //flame.fillOval(0, 0, flame.getWidth(), flame.getHeight());
-        addForce(new Vector(returnRotation(), Rocket.mySpeed + .5));
     }
 
     public Flame(int i, int ii)
