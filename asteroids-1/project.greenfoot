@@ -1,5 +1,5 @@
 #Greenfoot properties
-#Tue Nov 18 18:15:28 PST 2014
+#Tue Nov 18 18:34:05 PST 2014
 target16.name=Space
 dependency35.to=Bullet
 target2.name=Rocket
@@ -47,7 +47,7 @@ dependency1.type=UsesDependency
 target16.y=190
 target16.x=100
 dependency41.type=UsesDependency
-target14.editor.width=1280
+target14.editor.width=870
 dependency8.type=UsesDependency
 dependency5.from=Rocket
 dependency48.type=UsesDependency
@@ -110,7 +110,7 @@ target8.height=50
 dependency26.to=Rocket
 target16.editor.width=1280
 mainWindow.y=23
-mainWindow.x=1
+mainWindow.x=0
 target3.showInterface=false
 target12.showInterface=false
 dependency3.to=Bullet
@@ -446,7 +446,7 @@ target15.editor.height=744
 dependency1.to=Asteroid
 dependency33.type=UsesDependency
 dependency30.from=Space
-target9.editor.width=1280
+target9.editor.width=833
 class.asd.superclass=greenfoot.Actor
 target5.width=80
 dependency45.to=Firework
