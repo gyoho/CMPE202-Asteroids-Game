@@ -70,3 +70,17 @@
     Traverse through the array of asteroids and check
     if some of them are in the given range. Return the asteroids
     in the range for take further action.
+
+## State
+    Rocket will have additional equipment after level 3
+    Note) to be equipped, must ignit engine first
+    IRocketState, NormalState, AdvancedState
+    
+    @Class: NormalState
+    public void ignite() {
+        // check the level here
+        if(Space.level >= 3) {
+            rocket.setState(rocket.getAdvancedState());
+        }
+        ...
+    }
