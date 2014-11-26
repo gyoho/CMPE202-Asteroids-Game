@@ -12,29 +12,24 @@ public class Asteroid extends SmoothMover
 
     /** When the stability reaches 0 the asteroid will explode */
     private int stability;
+    
+    private Counter counter;
 
     public static int aSize;
     
-    public Asteroid()
-    {
-        this(50);
-    }
-    
-    public Asteroid(int size)
-    {
+    public Asteroid(Counter counter, int size) {
         super(new Vector(Greenfoot.getRandomNumber(360), 2));
+        this.counter = counter;
         aSize = size;
         setSize(size);
     }
     
-    public Asteroid(int size, Vector speed)
-    {
+    public Asteroid(int size, Vector speed) {
         super(speed);
         setSize(size);
     }
     
-    public void act()
-    {         
+    public void act() {         
         move();
         aSize = size;
     }
@@ -43,8 +38,7 @@ public class Asteroid extends SmoothMover
      * Set the size of this asteroid. Note that stability is directly
      * related to size. Smaller asteroids are less stable.
      */
-    public void setSize(int size) 
-    {
+    public void setSize(int size) {
         stability = size;
         this.size = size;
         GreenfootImage image = getImage();
@@ -55,17 +49,15 @@ public class Asteroid extends SmoothMover
      * Return the current stability of this asteroid. (If it goes down to 
      * zero, it breaks up.)
      */
-    public int getStability() 
-    {
+    public int getStability() {
         return stability;
     }
     
     /**
      * Hit this asteroid dealing the given amount of damage.
      */
-    public void hit(int damage) 
-    {
-        Counter.add(damage * Space.level);
+    public void hit(int damage) {
+        counter.add(damage * Space.level);
         stability = stability - damage;
         if(stability <= 0) 
             breakUp ();         
@@ -75,8 +67,7 @@ public class Asteroid extends SmoothMover
      * Break up this asteroid. If we are still big enough, this will create two
      * smaller asteroids. If we are small already, just disappear.
      */
-    private void breakUp() 
-    {
+    private void breakUp() {
         Greenfoot.playSound("Explosion.wav");
         
         if(size <= 16) 
@@ -107,5 +98,4 @@ public class Asteroid extends SmoothMover
             Space.aNumber--;
         }
     }
-    
 }

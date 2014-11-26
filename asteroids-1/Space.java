@@ -7,13 +7,19 @@ import java.awt.*;
  * @author Michael Kolling
  * @version 1.1
  */
-public class Space extends World
-{
+public class Space extends World {
     private Counter scoreCounter;
     private LevelCounter levelCounter;
     private int startAsteroids = 1;
     private int otherAsteroidNumber = 3;
 
+    /** 
+     * 1: Easy
+     * 2: Normal
+     * 3: Hard
+    **/
+    private int playMode;
+    
     public static int level = 1;
     public static int aNumber;
     public static int fireworkNumber;
@@ -22,8 +28,7 @@ public class Space extends World
 
     GreenfootSound bgm = new GreenfootSound("bgm.mp3");
     GreenfootSound over = new GreenfootSound("game over.mp3");
-    public Space() 
-    {
+    public Space() {
         super(800, 600, 1);
         GreenfootImage background = getBackground();
         background.setColor(Color.BLACK);
@@ -38,7 +43,7 @@ public class Space extends World
         addAsteroids(startAsteroids);
 
         levelCounter = new LevelCounter(level);
-        scoreCounter = new Counter("Score: ");
+        scoreCounter = new Counter("Score: ", playMode);
         addObject(scoreCounter, 60, 580);
         addObject(levelCounter, 60, 550);
         ProtonWave.initializeImages();
@@ -70,7 +75,7 @@ public class Space extends World
         {
             int x = Greenfoot.getRandomNumber(getWidth()/2);
             int y = Greenfoot.getRandomNumber(getHeight()/2);
-            addObject(new Asteroid(), x, y);
+            addObject(new Asteroid(scoreCounter, 50), x, y);
             aNumber++;
         }
 

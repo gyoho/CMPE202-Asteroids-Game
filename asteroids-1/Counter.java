@@ -3,14 +3,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, and Greenfoot)
 import java.awt.Color;
 import java.awt.Graphics;
 
-/**
- * Counter that displays a text and number.
- * 
- * @author Michael Kolling
- * @version 1.0.1
- */
-public class Counter extends Actor
-{
+public class Counter extends Actor {
     private static final Color textColor = new Color(29, 234, 59);
 
     public static int value;
@@ -20,17 +13,19 @@ public class Counter extends Actor
     
     public static int levelDelay;
     
+    // Strategy Pattern
+    private IRecordStrategy strategy;
 
-    public Counter()
-    {
-        this("");
-    }
-
-    public Counter(String prefix)
-    {
+    public Counter(String prefix, int playMode) {
         text = prefix;
         stringLength = (text.length() + 2) * 10;
 
+        switch(playMode) {
+            case 1: strategy = new EasyMode(); break;
+            case 2: strategy = new NormalMode(); break;
+            case 3: strategy = new HardMode(); break;
+        }
+        
         setImage(new GreenfootImage(stringLength, 16));
         GreenfootImage image = getImage();
         image.setColor(textColor);
@@ -39,36 +34,32 @@ public class Counter extends Actor
         target = 0;
         levelDelay = 0;
         updateImage();
-        
     }
 
     public void act() {
         updateImage();
         levelDelay++;
     }
-
-    public static void add(int score)
-    {
-        value += score;
+    
+    public void setStrategy(IRecordStrategy strategy) {
+	    this.strategy = strategy;
+	}
+	
+    public void add(int score) {
+       strategy.updateScore(score);
     }
 
-    public int getValue()
-    {
+    public int getValue() {
         return target;
     }
 
-    /**
-     * Make the image
-     */
-    private void updateImage()
-    {
+    private void updateImage() {
         GreenfootImage image = getImage();
         image.clear();
         image.drawString(text + value, 1, 12);
     }
 
-    public void setValue(int newValue)  
-    {  
+    public void setValue(int newValue) {  
         target = newValue;  
         value = newValue;  
         updateImage();  

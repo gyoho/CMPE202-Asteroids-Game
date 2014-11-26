@@ -51,7 +51,7 @@ public class ScoreBoard extends Actor
      */
     public ScoreBoard(int score, String saying)
     {
-        score = this.score;
+        this.score = score;
         this.saying = saying;
         makeImage(saying, "Score: ", score);
     }
