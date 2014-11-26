@@ -1,19 +1,9 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, and Greenfoot)
 import java.util.List;
 
-/**
- * A rocket that can be controlled by the arrowkeys: up, left, right.
- * The gun is fired by hitting the 'space' key. 'z' releases a proton wave.
- * 
- * @author Poul Henriksen
- * @author Michael Kolling
- * 
- * @version 1.0
- */
-public class Rocket extends SmoothMover
-{
-    private static final int gunReloadTime = 10;         // The minimum delay between firing the gun.
-    private static final int protonReloadTime = 500;    // The minimum delay between proton wave bursts.
+public class Rocket extends SmoothMover {
+    public static final int gunReloadTime = 10;         // The minimum delay between firing the gun.
+    public static final int protonReloadTime = 500;    // The minimum delay between proton wave bursts.
 
     private int reloadDelayCount;               // How long ago we fired the gun the last time.
     private int protonDelayCount;               // How long ago we fired the proton wave the last time.
@@ -31,11 +21,17 @@ public class Rocket extends SmoothMover
 
     public static boolean PIndicatorAdded;
     public static boolean bWeaponActivated;
+    
+    // Posesses all states
+    IRocketState normalState;
+    IRocketState advancedState;
+    IRocketState currentState;
+   
+    
     /**
      * Initilise this rocket.
      */
-    public Rocket()
-    {
+    public Rocket() {
         int a = image.getWidth();
         int b = image.getHeight();
         width = a;
@@ -45,15 +41,20 @@ public class Rocket extends SmoothMover
         reloadDelayCount = 5;
         protonDelayCount = 300;
         
-        addForce(new Vector(13, 0.3)); // initially slowly drifting
+        // initially slowly drifting
+        addForce(new Vector(13, 0.3));
+        
+        // instantate all states
+        normalState = new NormalState(this);
+        advancedState = new AdvancedState(this);
+        currentState = normalState;
     }
 
     /**
      * Do what a rocket's gotta do. (Which is: mostly flying about, and turning,
      * accelerating and shooting when the right keys are pressed.)
      */
-    public void act()
-    {
+    public void act() {
         move();
         checkKeys();
 
@@ -72,75 +73,50 @@ public class Rocket extends SmoothMover
     /**
      * Check whether there are any key pressed and react to them.
      */
-    private void checkKeys() 
-    {
-        ignite(Greenfoot.isKeyDown("up"));
-
-        if (Greenfoot.isKeyDown("left")) 
-        {
-            setRotation(getRotation() - 5);
-            double boostPos[][] = {{-2, 27}};
-            for (double[] pos: boostPos)
-            {
-
-                double x = pos[0];
-                double y = pos[1];
-
-                double dir = calculateDirection(x, y);
-                double dist = calculateMagnitude(x, y);
-
-                dir += getRotation();
-
-                double worldX = getX() + calculateX(dir, dist);
-                double worldY = getY() + calculateY(dir, dist);
-
-                getWorld().addObject(new Flame(1, 2), (int) worldX, (int) worldY);
-
-            }
-            
+    public void checkKeys() {
+        if (Greenfoot.isKeyDown("up")) {
+            currentState.ignite();
         }
-        if (Greenfoot.isKeyDown("right")) 
-        {
-            setRotation(getRotation() + 5);
 
-            double boostPos[][] = {{-2, -27}};
-            for (double[] pos: boostPos)
-            {
-
-                double x = pos[0];
-                double y = pos[1];
-
-                double dir = calculateDirection(x, y);
-                double dist = calculateMagnitude(x, y);
-
-                dir += getRotation();
-
-                double worldX = getX() + calculateX(dir, dist);
-                double worldY = getY() + calculateY(dir, dist);
-
-                getWorld().addObject(new Flame(1, 1), (int) worldX, (int) worldY);
-
-            }
-
+        if (Greenfoot.isKeyDown("left")) {
+            turnLeft();
         }
-        if (Greenfoot.isKeyDown("space")) 
-        {
+        
+        if (Greenfoot.isKeyDown("right")) {
+            turnRight();
+        }
+        
+        if (Greenfoot.isKeyDown("space")) {
             fire();
         }
-        if (Greenfoot.isKeyDown("a")) 
-        {
-            startProtonWave();
+        
+        if (Greenfoot.isKeyDown("a")) {
+            currentState.startProtonWave();
         }
     }
 
+    public void setState(IRocketState state) {
+        this.currentState = state;
+    }
+    
+    public IRocketState getState() {
+        return currentState;
+    }
+    
+    public IRocketState getNormalState() {
+        return normalState;
+    }
+    
+    public IRocketState getAdvancedState() {
+        return advancedState;
+    }
+    
     /**
      * Check whether we are colliding with an asteroid.
      */
-    private void checkCollision() 
-    {
+    private void checkCollision() {
         Actor a = getOneIntersectingObject(Asteroid.class);
-        if (a != null) 
-        {
+        if (a != null) {
             Space space = (Space) getWorld();
             for (int i = 0; i < 60 + 10; i++)
             {
@@ -151,28 +127,62 @@ public class Rocket extends SmoothMover
         }
     }
 
-    /**
-     * Should the rocket be ignited?
-     */
-    private void ignite(boolean boosterOn) 
-    {
-        if (boosterOn)
-        {
-            addForce (new Vector(getRotation(), 0.3));
-            showFlame();
+    private void checkHud() {
+        if(currentState == advancedState && !PIndicatorAdded && protonDelayCount >= protonReloadTime) {
+            getWorld().addObject(new WaveDisplay(), getWorld().getWidth() / 2, getWorld(). getHeight() / getWorld().getHeight() + 20);
+            PIndicatorAdded = true;
         }
     }
-
-    /**
-     * Fire a bullet if the gun is ready.
-     */
-    private void fire() 
-    {
-        if (reloadDelayCount >= gunReloadTime) 
-        {           
+    
+    void turnLeft() {
+        setRotation(getRotation() - 5);
+        double boostPos[][] = {{-2, 27}};
+        for (double[] pos: boostPos) {
+    
+            double x = pos[0];
+            double y = pos[1];
+    
+            double dir = calculateDirection(x, y);
+            double dist = calculateMagnitude(x, y);
+    
+            dir += getRotation();
+    
+            double worldX = getX() + calculateX(dir, dist);
+            double worldY = getY() + calculateY(dir, dist);
+    
+            getWorld().addObject(new Flame(1, 2), (int) worldX, (int) worldY);
+    
+        }
+    }
+    
+    void turnRight() {
+        setRotation(getRotation() + 5);
+    
+        double boostPos[][] = {{-2, -27}};
+        for (double[] pos: boostPos)
+        {
+    
+            double x = pos[0];
+            double y = pos[1];
+    
+            double dir = calculateDirection(x, y);
+            double dist = calculateMagnitude(x, y);
+    
+            dir += getRotation();
+    
+            double worldX = getX() + calculateX(dir, dist);
+            double worldY = getY() + calculateY(dir, dist);
+    
+            getWorld().addObject(new Flame(1, 1), (int) worldX, (int) worldY);
+    
+        }
+    
+    }
+    
+    public void fire() {
+        if (reloadDelayCount >= gunReloadTime) {           
             double bulletPos[][] = {{20, 5}, {20, -5}};
-            for (double[] pos: bulletPos)
-            {
+            for (double[] pos: bulletPos) {
 
                 double x = pos[0];
                 double y = pos[1];
@@ -192,40 +202,12 @@ public class Rocket extends SmoothMover
             }
         }
     }
-
-    /**
-     * Release a proton wave (if it is loaded).
-     */
-    private void startProtonWave() 
-    {
-        if (Space.level > 2 && protonDelayCount >= protonReloadTime) 
-        {
-            ProtonWave wave = new ProtonWave();
-            getWorld().addObject (wave, getX(), getY());
-            getWorld().removeObjects(getWorld().getObjects(WaveDisplay.class));
-            protonDelayCount = 0;
-            PIndicatorAdded = false;
-        }
-    }
-
-    private void checkHud()
-    {
-
-        if(!PIndicatorAdded && protonDelayCount >= protonReloadTime)
-        {
-            getWorld().addObject(new WaveDisplay(), getWorld().getWidth() / 2, getWorld(). getHeight() / getWorld().getHeight() + 20);
-            PIndicatorAdded = true;
-        }
-    }
-
-    private void showFlame()
-    {
+    
+    public void showFlame() {
         int i = Greenfoot.getRandomNumber (50);
         double thrusterPos[][] = {{-20, 0}};
-        if (i >= 0)
-        {
-            for (double[] pos: thrusterPos)
-            {
+        if (i >= 0) {
+            for (double[] pos: thrusterPos) {
                 double x = pos[0];
                 double y = pos[1];
 
@@ -239,8 +221,14 @@ public class Rocket extends SmoothMover
 
                 getWorld().addObject(new Flame(1), (int) worldX, (int) worldY);
             }
-
         }
     }
-
+    
+    public void setProtonDelayCount(int protonDelayCount) {
+        this.protonDelayCount = protonDelayCount;
+    }
+    
+    public int getProtonDelayCount() {
+        return protonDelayCount;
+    }
 }

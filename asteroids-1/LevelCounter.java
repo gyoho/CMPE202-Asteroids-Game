@@ -37,8 +37,8 @@ public class LevelCounter extends Actor
     }
 
     public void act() {
-        if (Space.level != level)
-        {
+        // observer pattern
+        if (Space.level != level) {
             level = Space.level;
             updateImage();
         }
