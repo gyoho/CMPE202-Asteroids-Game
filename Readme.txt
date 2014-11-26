@@ -84,3 +84,20 @@
         }
         ...
     }
+    
+## Strategy
+    Different level of play modes; Easy, Normal, Hard
+    
+    @Class: Counter
+    public Counter(String prefix, int playMode) {
+        switch(playMode) {
+            case 1: strategy = new EasyMode(); break;
+            case 2: strategy = new NormalMode(); break;
+            case 3: strategy = new HardMode(); break;
+        }
+        ...
+    }
+    
+    public void add(int score) {
+        strategy.updateScore(score);
+    }
