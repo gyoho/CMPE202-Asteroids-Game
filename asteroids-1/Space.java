@@ -29,6 +29,9 @@ public class Space extends World implements ISubject{
 
         Rocket rocket = new Rocket();
         addObject(rocket, getWidth()/2 + 100, getHeight()/2);
+        
+        MotherShip motherShip = new MotherShip();
+        addObject(motherShip, 100, 100);
 
         aNumber = 0;
         fireworkNumber = 0;
