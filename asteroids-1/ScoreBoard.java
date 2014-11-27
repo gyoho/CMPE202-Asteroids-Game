@@ -3,15 +3,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.Calendar;
 
-/**
- * The ScoreBoard is used to display results on the screen. It can display some
- * text and several numbers.
- * 
- * @author M Kolling
- * @version 1.0
- */
-public class ScoreBoard extends Actor
-{
+
+public class ScoreBoard extends Actor {
     public static final float FONT_SIZE = 48.0f;
     public static final int WIDTH = 400;
     public static final int HEIGHT = 300;
@@ -24,21 +17,17 @@ public class ScoreBoard extends Actor
     /**
      * Create a score board with dummy result for testing.
      */
-    public ScoreBoard()
-    {
+    public ScoreBoard() {
         this(100, "Game Over");
     }
 
-    public void act()
-    {
-        if(score != Counter.value)
-        {
+    public void act() {
+        if(score != Counter.value) {
             score = Counter.value;
             makeImage(saying, "Score: ", score);
         }
         
-        for(int i = 0; i < 3; i++)
-        {
+        for(int i = 0; i < 3; i++) {
             if(rgb[i] <= 80)
             {
                 rgb[i] = 255 - rgb[i];
@@ -49,8 +38,7 @@ public class ScoreBoard extends Actor
     /**
      * Create a score board for the final result.
      */
-    public ScoreBoard(int score, String saying)
-    {
+    public ScoreBoard(int score, String saying) {
         this.score = score;
         this.saying = saying;
         makeImage(saying, "Score: ", score);
@@ -59,8 +47,7 @@ public class ScoreBoard extends Actor
     /**
      * Make the score board image.
      */
-    private void makeImage(String title, String prefix, int score)
-    {
+    private void makeImage(String title, String prefix, int score) {
         GreenfootImage image = new GreenfootImage(WIDTH, HEIGHT);
 
         image.setColor(new Color(0, 0, 0, 0));

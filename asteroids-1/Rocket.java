@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Rocket extends SmoothMover {
     public static final int gunReloadTime = 10;         // The minimum delay between firing the gun.
-    public static final int protonReloadTime = 500;    // The minimum delay between proton wave bursts.
+    public static final int protonReloadTime = 300;    // The minimum delay between proton wave bursts.
 
     private int reloadDelayCount;               // How long ago we fired the gun the last time.
     private int protonDelayCount;               // How long ago we fired the proton wave the last time.

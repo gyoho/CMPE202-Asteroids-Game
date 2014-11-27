@@ -23,15 +23,15 @@ public class Modes extends World
      public void act(){
     
         if(Greenfoot.isKeyDown("e")) {
-            Greenfoot.setWorld(new Space('e'));
+            Greenfoot.setWorld(new Space(1));
         }
         
         if(Greenfoot.isKeyDown("n")) {
-            Greenfoot.setWorld(new Space('n'));
+            Greenfoot.setWorld(new Space(2));
         }
         
         if(Greenfoot.isKeyDown("h")) {
-            Greenfoot.setWorld(new Space('h'));
+            Greenfoot.setWorld(new Space(3));
         } 
     }
 }

@@ -8,7 +8,7 @@ public class Space extends World implements ISubject{
     private int startAsteroids = 1;
     private int otherAsteroidNumber = 3;
     
-    public static int level = 1;
+    public static int level;
     public static int aNumber;
     public static int fireworkNumber;
     private boolean played = false;
@@ -20,7 +20,7 @@ public class Space extends World implements ISubject{
     GreenfootSound bgm = new GreenfootSound("bgm.mp3");
     GreenfootSound over = new GreenfootSound("game over.mp3");
     
-    public Space(char playMode) {
+    public Space(int playMode) {
         super(800, 600, 1);
         GreenfootImage background = getBackground();
         background.setColor(Color.BLACK);
@@ -33,14 +33,20 @@ public class Space extends World implements ISubject{
         MotherShip motherShip = new MotherShip();
         addObject(motherShip, 100, 100);
 
+        // level needed to be reset every new game
+        level = 1;
+        
         aNumber = 0;
         fireworkNumber = 0;
-        addAsteroids(startAsteroids);
-
-        levelCounter = new LevelCounter(level);
+        
+        levelCounter = new LevelCounter();
         scoreCounter = new Counter("Score: ", playMode);
         addObject(scoreCounter, 60, 580);
         addObject(levelCounter, 60, 550);
+        
+        /** call this AFTER instantiating scoreCounter!!**/
+        addAsteroids(startAsteroids);
+        
         ProtonWave.initializeImages();
 
         setPaintOrder(LevelCounter.class, Counter.class, ScoreBoard.class, Rocket.class, Firework.class, Flame.class, Particle.class, Asteroid.class);
@@ -48,13 +54,11 @@ public class Space extends World implements ISubject{
         attach(levelCounter);
     }
 
-    public void act()
-    {
+    public void act() {
         checkANumber();
         playBgm();
 
-        if(gameOver)
-        {
+        if(gameOver) {
             fireworks();
         }
     }
@@ -74,12 +78,21 @@ public class Space extends World implements ISubject{
 	    }
 	}
 	
+	/**
+	 * Need for Strategy pattern
+	 * Being accessed from Asteroids:
+	 * when an asteroid break into two smaller one
+	 * new asteroids are instantiated
+	 */
+	public Counter getScoreCounter() {
+	    return scoreCounter;
+	}
+	
     /**
      * Add a given number of asteroids to our world. Asteroids are only added into
      * the left half of the world.
      */
-    private void addAsteroids(int count) 
-    {
+    private void addAsteroids(int count) {
 
         for(int i = 0; i < count; i++) 
         {
@@ -134,7 +147,7 @@ public class Space extends World implements ISubject{
             }
             if (!levelUp.isPlaying()) {
                 addAsteroids(level + 1);
-                level++;
+                ++level;
                 updateLevel();
                 notifyObservers();
                 played = false;

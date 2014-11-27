@@ -3,12 +3,6 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, and Greenfoot)
 import java.awt.Color;
 import java.awt.Graphics;
 
-/**
- * Counter that displays a text and number.
- * 
- * @author Dusty
- * @version 1.0
- */
 public class LevelCounter extends Actor implements IObserver{
     private static final Color textColor = new Color(29, 234, 59);
 
@@ -28,7 +22,7 @@ public class LevelCounter extends Actor implements IObserver{
         GreenfootImage image = getImage();
         image.setColor(textColor);
 
-        level = 0;
+        this.level = level;
         updateImage();
     }
     
