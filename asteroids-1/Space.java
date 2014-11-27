@@ -1,34 +1,26 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, and Greenfoot)
 import java.awt.*;
+import java.util.ArrayList;
 
-/**
- * Space. Something for rockets to fly in.
- * 
- * @author Michael Kolling
- * @version 1.1
- */
-public class Space extends World {
+public class Space extends World implements ISubject{
     private Counter scoreCounter;
     private LevelCounter levelCounter;
     private int startAsteroids = 1;
     private int otherAsteroidNumber = 3;
-
-    /** 
-     * 1: Easy
-     * 2: Normal
-     * 3: Hard
-    **/
-    private int playMode;
     
     public static int level = 1;
     public static int aNumber;
     public static int fireworkNumber;
     private boolean played = false;
     private boolean gameOver = false;
-
+    
+    // Observer pattern
+    private ArrayList<IObserver> observers = new ArrayList<IObserver>();
+    
     GreenfootSound bgm = new GreenfootSound("bgm.mp3");
     GreenfootSound over = new GreenfootSound("game over.mp3");
-    public Space() {
+    
+    public Space(char playMode) {
         super(800, 600, 1);
         GreenfootImage background = getBackground();
         background.setColor(Color.BLACK);
@@ -48,9 +40,9 @@ public class Space extends World {
         addObject(levelCounter, 60, 550);
         ProtonWave.initializeImages();
 
-        level = 1;
-
         setPaintOrder(LevelCounter.class, Counter.class, ScoreBoard.class, Rocket.class, Firework.class, Flame.class, Particle.class, Asteroid.class);
+        
+        attach(levelCounter);
     }
 
     public void act()
@@ -64,6 +56,21 @@ public class Space extends World {
         }
     }
 
+    /**
+     * Observer pattern
+     */
+    public void attach(IObserver obj){
+        observers.add(obj);
+    }
+	public void detach(IObserver obj){
+	    observers.remove(obj);
+	}
+	public void notifyObservers() {
+	    for(IObserver obj : observers) {
+	        obj.update();
+	    }
+	}
+	
     /**
      * Add a given number of asteroids to our world. Asteroids are only added into
      * the left half of the world.
@@ -105,37 +112,30 @@ public class Space extends World {
         String gameSaying[] = {"YOU SUCK!!", "YOU BLOW!!", "NOT BAD", "WINNER!...NOT", "GETTING GOOD", "GOOD JOB", "IMPRESSIVE"};
 
         gameOver = true;
-        if (level >= 1 && level < 8)
-        {
+        if (level >= 1 && level < 8) {
             addObject(new ScoreBoard(Counter.value, gameSaying[level-1]), getWidth()/2, getHeight()/2);
         }
-        else
-        {
+        else {
             addObject(new ScoreBoard(Counter.value, "Game Over"), getWidth() / 2, getHeight() / 2);
         }
-
-        
     }
 
     public void checkANumber()
     {
 
-        if(this.aNumber == 0)
-        {
+        if(this.aNumber == 0) {
             GreenfootSound levelUp = new GreenfootSound("hooray.wav");
-            if (!played)
-            {
+            if (!played) {
                 levelUp.play();
                 played = true;
             }
-            if (!levelUp.isPlaying())
-            {
+            if (!levelUp.isPlaying()) {
                 addAsteroids(level + 1);
-                level = level + 1;
-                updateLevel();  
+                level++;
+                updateLevel();
+                notifyObservers();
                 played = false;
             }
-
         }
     }
 

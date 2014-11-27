@@ -9,21 +9,18 @@ import java.awt.Graphics;
  * @author Dusty
  * @version 1.0
  */
-public class LevelCounter extends Actor
-{
+public class LevelCounter extends Actor implements IObserver{
     private static final Color textColor = new Color(29, 234, 59);
 
     public static int level;
     private String text;
     private int stringLength;
 
-    public LevelCounter()
-    {
+    public LevelCounter() {
         this(0);
     }
 
-    public LevelCounter(int level)
-    {
+    public LevelCounter(int level) {
         text = "Level: ";
         stringLength = (text.length() + 2) * 10;
 
@@ -33,23 +30,17 @@ public class LevelCounter extends Actor
 
         level = 0;
         updateImage();
-
     }
-
-    public void act() {
-        // observer pattern
-        if (Space.level != level) {
-            level = Space.level;
-            updateImage();
-        }
+    
+    public void update() {
+        level = Space.level;
+        updateImage();
     }
-
 
     /**
      * Make the image
      */
-    private void updateImage()
-    {
+    private void updateImage() {
         GreenfootImage image = getImage();
         image.clear();
         image.drawString(text + level, 1, 12);

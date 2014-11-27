@@ -16,14 +16,14 @@ public class Counter extends Actor {
     // Strategy Pattern
     private IRecordStrategy strategy;
 
-    public Counter(String prefix, int playMode) {
+    public Counter(String prefix, char playMode) {
         text = prefix;
         stringLength = (text.length() + 2) * 10;
 
         switch(playMode) {
-            case 1: strategy = new EasyMode(); break;
-            case 2: strategy = new NormalMode(); break;
-            case 3: strategy = new HardMode(); break;
+            case 'e': strategy = new EasyMode(); break;
+            case 'n': strategy = new NormalMode(); break;
+            case 'h': strategy = new HardMode(); break;
         }
         
         setImage(new GreenfootImage(stringLength, 16));
