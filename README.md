@@ -46,6 +46,7 @@
 
 ## Chain of Responsibility
   1. In class Bullet:
+ 
     private void checkAsteroidHit() {
         Asteroid asteroid = (Asteroid) getOneIntersectingObject(Asteroid.class);
         ...
@@ -57,6 +58,7 @@
     if it is closed enough to the object
 
   2. In class ProtonWave:
+  
     private void checkCollision() {
         int range = getImage().getWidth() / 2;
         List<Asteroid> asteroids = getObjectsInRange(range, Asteroid.class);
